@@ -8,7 +8,6 @@ block content
           .input-group
             input(ng-model="tilInput" name="tilInput" placeholder="today I learned...").form-control
       .col-sm-8.col-md-5
-        ul
-          li(ng-repeat="til in tils")
-            {{til.text}}
-
+        div(ng-repeat="til in tils").panel.panel-info
+          header.panel-heading
+            h3.panel-title {{til.text}}
