@@ -68,7 +68,7 @@ gulp.task('css', function () {
 });
 
 gulp.task('clean', function (cb) {
-  del('dist/**/*', cb);
+  del(['dist/**/*', '!dist/css', '!dist/templates'], cb);
 });
 
 gulp.task('build', ['clean', 'templates', 'css', 'js']);
