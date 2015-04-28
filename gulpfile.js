@@ -6,6 +6,7 @@ var util = require('gulp-util');
 var shell = require('gulp-shell');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
+var del = require('del');
 
 var MANIFEST = {
   js: {
@@ -66,5 +67,9 @@ gulp.task('css', function () {
   .pipe(gulp.dest('./dist/css'));
 });
 
-gulp.task('build', ['templates', 'css', 'js']);
+gulp.task('clean', function (cb) {
+  del('dist/**/*', cb);
+});
+
+gulp.task('build', ['clean', 'templates', 'css', 'js']);
 gulp.task('default', ['build', 'dev']);
