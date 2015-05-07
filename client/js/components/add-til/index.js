@@ -8,7 +8,8 @@ module.exports = function (clientActionCreators) {
       $scope.addTil = function ($event) {
         if ($event.which === 13) {
           clientActionCreators.addTil({
-            text: $event.currentTarget.value
+            text: $event.currentTarget.value,
+            userId: 'user-id' // hardcoded for simplicity
           });
           $event.currentTarget.value = '';
         }
