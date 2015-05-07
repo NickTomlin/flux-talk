@@ -130,12 +130,12 @@ tilApp.run(function (tilStore, userStore, serverActionCreators) {
   // we preload the app with some data to replicate an XHR
   serverActionCreators.receiveTils({
     data: {
-      users: [{displayName: 'Nick Tomlin', _id: 'user-id'}],
+      users: [{displayName: 'Marty McFly', _id: 'user-id'}],
       tils: [
         {
           _id: 'til-id',
           userId: 'user-id',
-          text: 'A great thing'
+          text: 'Biff was always a jerk.'
         }
       ]
     }
