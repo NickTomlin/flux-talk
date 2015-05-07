@@ -1,19 +1,11 @@
 <section ng-controller="index">
   <div class="row">
     <div class="well col-sm-4 col-md-3">
-      <form ng-submit="addTil()">
-        <div class="input-group">
-          <input ng-model="tilInput" name="tilInput" placeholder="today I learned..." class="form-control"/>
-        </div>
-      </form>
+      <add-til />
     </div>
 
     <div class="col-sm-8 col-md-5">
-      <div ng-repeat="til in tils" class="panel panel-info">
-        <header class="panel-heading">
-          <h3 class="panel-title">{{til.text}}</h3>
-        </header>
-      </div>
+      <til-list tils="tils"></til-list>
     </div>
   </div>
 </section>

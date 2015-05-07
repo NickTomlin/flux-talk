@@ -9,34 +9,30 @@ var Dispatcher = require('Flux').Dispatcher;
 var tilApp = angular.module('til', []);
 var dispatcher = new Dispatcher();
 
-tilApp.controller('index', function ($scope, clientActionCreators, tilStore) {
+tilApp.directive('addTil', require('./components/add-til'));
+tilApp.directive('tilList', require('./components/til-list'));
+
+tilApp.controller('index', function ($scope, tilStore) {
   $scope.tils = [];
-  $scope.tilInput = '';
 
   tilStore.addChangeListener(function () {
     $scope.tils = tilStore.getAll();
   });
-
-  $scope.addTil = function () {
-    console.log('controller::AddTil', $scope.tilInput);
-    clientActionCreators.addTil($scope.tilInput);
-    $scope.tilInput = '';
-  };
 });
 
 tilApp.service('clientActionCreators', function () {
-  this.addTil = function (text) {
-    console.log('clientActionCreators::AddTil', text);
+  this.addTil = function (data) {
+    console.log('clientActionCreatorsCreators::AddTil', data);
     dispatcher.dispatch({
       type: 'ADD_TIL',
       data: {
         til: {
-          text: text,
+          text: data.text,
           clientId: uuid()
         }
       }
     });
-  }
+  };
 });
 
 tilApp.service('tilStore', function () {
