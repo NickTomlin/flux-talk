@@ -6,7 +6,7 @@ var util = require('gulp-util');
 var shell = require('gulp-shell');
 var watchify = require('watchify');
 var source = require('vinyl-source-stream');
-var del = require('del');
+var nodemon = require('gulp-nodemon');
 
 var MANIFEST = {
   js: {
@@ -15,7 +15,7 @@ var MANIFEST = {
     serverAll: 'server/**/*.js'
   },
   templates: {
-    all: 'client/templates/**/*.html'
+    all: 'client/js/**/*.html'
   }
 };
 
@@ -32,7 +32,7 @@ function buildScript (src, watch) {
         util.log('Finished bundling');
       })
       .on('error', function (err) {
-        util.log('Bundle ', err.stack);
+        util.log('Bundle ', err, err.stack);
       })
       .pipe(source('app.js'))
       .pipe(gulp.dest('dist/js'));
@@ -43,7 +43,12 @@ function buildScript (src, watch) {
   return rebundle();
 }
 
-gulp.task('dev', ['build'], function () {
+gulp.task('dev', function () {
+  nodemon({
+    script: 'bin/www',
+    ext: 'js html jade',
+    watch: 'server'
+  });
   gulp.watch([MANIFEST.js.clientAll, MANIFEST.js.serverAll], ['lint']);
   gulp.watch([MANIFEST.templates.all], ['templates']);
   buildScript(MANIFEST.js.clientMain, true);
@@ -67,9 +72,5 @@ gulp.task('css', function () {
   .pipe(gulp.dest('./dist/css'));
 });
 
-gulp.task('clean', function (cb) {
-  del(['dist/**/*', '!dist/css', '!dist/templates'], cb);
-});
-
-gulp.task('build', ['clean', 'templates', 'css', 'js']);
-gulp.task('default', ['build', 'dev']);
+gulp.task('build', ['templates', 'css', 'js']);
+gulp.task('default', ['dev']);
