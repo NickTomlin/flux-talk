@@ -33,6 +33,20 @@ tilApp.service('clientActionCreators', function () {
       }
     });
   };
+
+  this.addComment = function (data) {
+    console.log('clientActionCreatorsCreators::AddComment', data);
+    dispatcher.dispatch({
+      type: 'ADD_COMMENT',
+      data: {
+        comment: {
+          text: data.text,
+          tilClientId: data.tilClientId,
+          userId: data.userId
+        }
+      }
+    });
+  };
 });
 
 tilApp.service('serverActionCreators', function () {
@@ -53,8 +67,20 @@ tilApp.service('tilStore', function (userStore) {
 
   function addTil (til) {
     til.clientId = uuid();
+    til.comments = til.comments || [];
+    til.comments.forEach(getUserDataForComment);
     til.user = userStore.get(til.userId);
     _tils[til.clientId] = til;
+  }
+
+  function getUserDataForComment (comment) {
+    comment.user = userStore.get(comment.userId);
+  }
+
+  function addComment (comment) {
+    var til = _tils[comment.tilClientId];
+    getUserDataForComment(comment);
+    til.comments.push(comment);
   }
 
   var tilStore = assign({}, EventEmitter.prototype, {
@@ -69,6 +95,7 @@ tilApp.service('tilStore', function (userStore) {
   });
 
   dispatcher.register(function (payload) {
+
     switch (payload.type) {
       case 'ADD_TIL':
         console.log('tilStore::ADD_TIL', payload.data);
@@ -80,8 +107,14 @@ tilApp.service('tilStore', function (userStore) {
         dispatcher.waitFor([userStore.dispatchToken]);
         console.log('tilStore::RECEIVE_TILS', payload.data);
         payload.data.tils.forEach(addTil);
-        console.log(_tils);
         tilStore.emit('change');
+      break;
+
+      case 'ADD_COMMENT':
+        dispatcher.waitFor([userStore.dispatchToken]);
+        console.log('tilStore::ADD_COMMENT', payload.data);
+        addComment(payload.data.comment);
+        tilStore.emit('change')
       break;
 
       default:
@@ -130,12 +163,13 @@ tilApp.run(function (tilStore, userStore, serverActionCreators) {
   // we preload the app with some data to replicate an XHR
   serverActionCreators.receiveTils({
     data: {
-      users: [{displayName: 'Nick Tomlin', _id: 'user-id'}],
+      users: [{displayName: 'Marty McFly', _id: 'user-id'}, {_id: 'user-2-id', displayName: 'Doc Brown'}],
       tils: [
         {
           _id: 'til-id',
           userId: 'user-id',
-          text: 'A great thing'
+          text: 'Biff was always a jerk.',
+          comments: [{text: 'Gah! Don\'t interfere with the past!', userId: 'user-2-id'}]
         }
       ]
     }

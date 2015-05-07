@@ -2,4 +2,10 @@
   <header class="panel-heading">
     <h3 class="panel-title">{{til.text}} - {{til.user.displayName}}</h3>
   </header>
+  <section class="panel-footer">
+    <h5>Comments</h5>
+    <article ng-repeat="comment in til.comments">
+      <p>{{comment.text}}<small> - {{comment.user.displayName}}</small></p>
+    </article>
+    <input type="text" placeholder="reply" ng-keydown="addComment($event, til)">
 </div>
