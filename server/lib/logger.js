@@ -1,10 +1,10 @@
 'use strict';
 
-var config = require('../../lib/config');
 var path = require('path');
 var winston = require('winston');
+var ENV = process.env.NODE_ENV || 'development';
 
-var logFile = path.resolve(__dirname + '../../../log', config.get('log_file'));
+var logFile = path.resolve(__dirname + '../../../log', ENV);
 var logger = new (winston.Logger)({
   transports: [
     new (winston.transports.File)({filename: logFile})
