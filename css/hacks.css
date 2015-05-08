@@ -1,0 +1,26 @@
+.reveal .code-example {
+ background: #3F3F3F;
+}
+
+.reveal pre code {
+  padding: 14px 10px;
+}
+
+.reveal .ascii {
+  padding: 20px 10px;
+}
+
+.featured-code {
+  background: rgba(245, 245, 245, 0.23);
+  border-radius: 4px;
+  padding: 3px;
+}
+
+.reveal .citation {
+  font-size: 0.5em;
+  float: right;
+}
+
+.citation a {
+  color: #31688E;
+}
