@@ -27,8 +27,7 @@ tilApp.service('clientActionCreators', function () {
       type: 'ADD_TIL',
       data: {
         til: {
-          text: data.text,
-          clientId: uuid()
+          text: data.text
         }
       }
     });
@@ -53,7 +52,9 @@ tilApp.service('tilStore', function () {
     switch (payload.type) {
       case 'ADD_TIL':
         console.log('tilStore::ADD_TIL', payload.data);
-        _tils[payload.data.til.clientId] = payload.data.til;
+        var til = payload.data.til;
+        til.clientId = uuid();
+        _tils[til.clientId] = til;
         tilStore.emit('change');
       break;
 
